@@ -1,4 +1,4 @@
-package basic.test.swap;
+package basic.swap;
 
 import java.util.Arrays;
 
