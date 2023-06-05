@@ -64,11 +64,8 @@ true
 
 ```java 
 private static Character convert(Character character){
-        if (FindCaseSensitive.isUpperCase(character)){
-            return toLowerCase(character);
-        }
-        return toUpperCase(character);
-        }
+	return FindCaseSensitive.isUpperCase(character) ? toLowerCase(character) : toUpperCase(character);
+	}
 ```
 convert() 메서드는 주어진 문자의 대소문자를 변환하는 기능을 제공한다. 
 메서드 내부에서는 주어진 문자(character)가 대문자인지 여부를 FindCaseSensitive.isUpperCase() 메서드를 통해 판별하고, 

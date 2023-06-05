@@ -10,10 +10,7 @@ public class ConvertToCase {
 	}
 
 	private static Character convert(Character character){
-		if (FindCaseSensitive.isUpperCase(character)){
-			return toLowerCase(character);
-		}
-		return toUpperCase(character);
+		return FindCaseSensitive.isUpperCase(character) ? toLowerCase(character) : toUpperCase(character);
 	}
 
 	private static Character toUpperCase(Character character){
