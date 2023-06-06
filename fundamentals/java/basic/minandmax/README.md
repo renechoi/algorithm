@@ -77,7 +77,7 @@ public static void main(String[] args) {
 ```java 
 public static int findMax(int[] arr) {
 	int max = Integer.MIN_VALUE;
-	for (int i = 0; i < arr.length-1; i++) {
+	for (int i = 0; i < arr.length; i++) {
 	    if (max < arr[i]) {
 	    max = arr[i];
 	    }
@@ -101,7 +101,7 @@ public static int findMax(int[] arr) {
 `findMax` 메서드에서 가장 핵심적인 연산은 for 루프 내부의 비교 연산이다:
 
 ```java
-for (int i = 0; i < arr.length-1; i++) {
+for (int i = 0; i < arr.length; i++) {
     if (max < arr[i]) {
         max = arr[i];
     }
@@ -130,6 +130,9 @@ System.out.println("최대값: " + findMax(numbers3));
 
 int[] numbers4 = {-12, -50, 1, 4, 3};
 System.out.println("최대값: " + findMax(numbers4));
+
+int[] numbers5 = {12, 13};
+System.out.println("최대값: " + findMax(numbers5));
 ```
 
 ```java
