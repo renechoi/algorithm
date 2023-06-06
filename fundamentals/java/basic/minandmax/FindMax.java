@@ -17,6 +17,8 @@ public class FindMax {
 		int[] numbers5 = {12, 13};
 		System.out.println("최대값: " + findMax(numbers5));
 
+		int[] numbers6 = {13, 12};
+		System.out.println("최대값: " + findMax(numbers6));
 	}
 
 	public static int findMax(int[] arr) {
