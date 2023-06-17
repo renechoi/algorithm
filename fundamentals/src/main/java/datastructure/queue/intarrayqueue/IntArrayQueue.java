@@ -1,28 +1,28 @@
-package datastructure.stack.intarrayque;
+package datastructure.queue.intarrayqueue;
 
-public class IntArrayQue {
+public class IntArrayQueue {
 	private int max;
 	private int pointer;
-	private int[] que;
+	private int[] queue;
 
-	public IntArrayQue(int capacity) {
+	public IntArrayQueue(int capacity) {
 		max = capacity;
 		pointer = 0;
-		que = new int[max];
+		queue = new int[max];
 	}
 
 	public void enqueue(int value) {
 		if (pointer >= max) {
 			throw new IllegalStateException("큐가 가득 찼습니다.");
 		}
-		que[pointer++] = value;
+		queue[pointer++] = value;
 	}
 
 	public int dequeue() {
 		if (pointer <= 0) {
 			throw new IllegalStateException("큐가 비어 있습니다.");
 		}
-		int value = que[0];
+		int value = queue[0];
 		reconstruct();
 		pointer--;
 		return value;
@@ -32,7 +32,7 @@ public class IntArrayQue {
 		if (pointer <= 0) {
 			throw new IllegalStateException("큐가 비어 있습니다.");
 		}
-		return que[0];
+		return queue[0];
 	}
 
 	public boolean isEmpty() {
@@ -53,9 +53,9 @@ public class IntArrayQue {
 
 	private void reconstruct() {
 		for (int i = 1; i < pointer; i++) {
-			que[i - 1] = que[i];
+			queue[i - 1] = queue[i];
 		}
-		que[pointer - 1] = 0;
+		queue[pointer - 1] = 0;
 	}
 
 }

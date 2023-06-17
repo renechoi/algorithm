@@ -1,8 +1,8 @@
-package datastructure.stack.intarrayque;
+package datastructure.queue.intarrayqueue;
 
-public class IntArrayQueMain {
+public class IntArrayQueueMain {
     public static void main(String[] args) {
-        IntArrayQue queue = new IntArrayQue(5); // 용량(capacity)이 5인 큐 생성
+        IntArrayQueue queue = new IntArrayQueue(5); // 용량(capacity)이 5인 큐 생성
 
         // 큐에 값 추가
         queue.enqueue(1);
