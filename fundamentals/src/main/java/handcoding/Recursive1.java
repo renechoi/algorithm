@@ -2,21 +2,30 @@ package handcoding;
 
 public class Recursive1 {
 	public static void main(String[] args) {
-		problem4();
+		// problem1();
+		problem2();
+
 
 	}
 
 
 	//  재귀를 이용한 피보나치(fibo 함수)
 	public static void problem1(){
-		System.out.println(fiboRecursive(1));
-		System.out.println(fiboRecursive(2));
-		System.out.println(fiboRecursive(3));
-		System.out.println(fiboRecursive(4));
-		System.out.println(fiboRecursive(5));
-		System.out.println(fiboRecursive(6));
-		System.out.println(fiboRecursive(7));
-		System.out.println(fiboRecursive(8));
+
+		System.out.println(fiboRecursive(50));
+
+		//
+		// System.out.println(fiboRecursive(1));
+		// System.out.println(fiboRecursive(2));
+		// System.out.println(fiboRecursive(3));
+		// System.out.println(fiboRecursive(4));
+		// System.out.println(fiboRecursive(5));
+		// System.out.println(fiboRecursive(6));
+		// System.out.println(fiboRecursive(7));
+		// System.out.println(fiboRecursive(8));
+
+
+
 
 	}
 
@@ -30,7 +39,7 @@ public class Recursive1 {
 
 	// 메모이제이션을 이용한 피보나치(memoFibo 함수)
 	public static void problem2(){
-		int n = 7;
+		int n = 40;
 		int[] numbers = new int[n+1];
 		numbers[1] = 1;
 		numbers[2] = 1;
