@@ -1,45 +1,49 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 public class Main {
 
+	private static final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+
 	public static void main(String[] args) throws IOException {
-		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-		int numberOfCoordinates = Integer.parseInt(bufferedReader.readLine());
+		int testCases = Integer.parseInt(bufferedReader.readLine());
 
-		int[] coordinates = receiveCoordinates(bufferedReader, numberOfCoordinates);
-		int[] coordinatesCopied = coordinates.clone();        // 정렬을 수행하고 order를 구하기위한 copy 배열
-
-		Arrays.sort(coordinatesCopied);
-
-		HashMap<Integer, Integer> orderedNumbers = new HashMap<>();
-		int order = 0;
-		for (int i = 0; i < coordinatesCopied.length; i++) {
-			if (orderedNumbers.containsKey(coordinatesCopied[i])) {
-				continue;
-			}
-			orderedNumbers.put(coordinatesCopied[i], order);
-			order++;
+		int[] original = new int[testCases];
+		int count= 0;
+		StringTokenizer stringTokenizer = new StringTokenizer(bufferedReader.readLine());
+		while (testCases-->0){
+			original[count++] = Integer.parseInt(stringTokenizer.nextToken());
 		}
+
+		int[] originalCopy = Arrays.copyOf(original, original.length);
+		Arrays.sort(original);
+
+		HashMap<Integer, Integer> numberWithCompressed = new HashMap<>();
+
+		count =0;
+		numberWithCompressed.put(original[0], count++);
+		for (int i =1 ; i < original.length; i++){
+			if (numberWithCompressed.get(original[i]) == (numberWithCompressed.get(original[i - 1]))){
+				numberWithCompressed.put(original[i], numberWithCompressed.get(original[i]));
+			} else {
+				numberWithCompressed.put(original[i], count++);
+			}
+		}
+
+		
 
 		StringBuilder stringBuilder = new StringBuilder();
-		for (int number : coordinates) {
-			stringBuilder.append(orderedNumbers.get(number)).append(" ");
-		}
-		System.out.println(stringBuilder);
-	}
+		IntStream.range(0, original.length).forEach(i-> stringBuilder.append(numberWithCompressed.get(originalCopy[i])).append(" "));
 
-	private static int[] receiveCoordinates(BufferedReader bufferedReader, int numberOfCoordinates) throws IOException {
-		int[] coordinates = new int[numberOfCoordinates];
-		StringTokenizer stringTokenizer = new StringTokenizer(bufferedReader.readLine());
-		for (int i = 0; i < numberOfCoordinates; i++) {
-			coordinates[i] = Integer.parseInt(stringTokenizer.nextToken());
-		}
-		return coordinates;
+		System.out.print(stringBuilder);
 	}
 }
+
+
