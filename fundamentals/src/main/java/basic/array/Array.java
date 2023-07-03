@@ -70,4 +70,27 @@ public class Array {
 		}
 		return true;
 	}
+
+	private static void swap(int i, int j, int[] arr) {
+		int temp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = temp;
+	}
+
+
+	private static void reverse(int start, int end, int[] arr) {
+		int repeat = (end - start + 1) / 2;
+		while (repeat-- > 0) {
+			swap(start, end, arr);
+			start++;
+			end--;
+		}
+	}
+
+	private static void reverse2(int start, int end, int[] arr) {
+		int repeat = (end - start + 1) / 2;
+		for (int i = 0; i < repeat; i++) {
+			swap(start + i, end - i, arr);
+		}
+	}
 }
