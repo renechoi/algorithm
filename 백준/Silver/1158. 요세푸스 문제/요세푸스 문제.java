@@ -1,49 +1,47 @@
+import static java.lang.Integer.*;
+
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 public class Main {
-	
+
+	private static StringTokenizer receiveInput(BufferedReader bufferedReader) throws IOException {
+		return new StringTokenizer(bufferedReader.readLine());
+	}
+
 	public static void main(String[] args) throws IOException {
+
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer stringTokenizer = new StringTokenizer(bufferedReader.readLine());
-		int N = Integer.parseInt(stringTokenizer.nextToken());
-		int K = Integer.parseInt(stringTokenizer.nextToken());
-		ArrayList<Integer> josephusPermutation = new ArrayList<>();
+		// BufferedReader bufferedReader = new BufferedReader(new FileReader("input.txt"));
 
-		Deque<Integer> people = new LinkedList<>();
+		StringTokenizer stringTokenizer = receiveInput(bufferedReader);
+		int N = parseInt(stringTokenizer.nextToken());
+		int K = parseInt(stringTokenizer.nextToken());
+
+		List<Integer> circle = new ArrayList<>();
 		for (int i = 1; i <= N; i++) {
-			people.add(i);
+			circle.add(i);
 		}
 
-		while (!people.isEmpty()) {
-			int count = K - 1;
-			josephusCalculation(count, josephusPermutation, people);
-		}
+		StringBuilder result = new StringBuilder();
+		result.append("<");
 
-		System.out.println(drawAnswer(josephusPermutation));
-	}
-
-	private static StringBuilder drawAnswer(ArrayList<Integer> josephusPermutation) {
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("<");
-		for (Integer number : josephusPermutation){
-			stringBuilder.append(number);
-			stringBuilder.append(", ");
+		int index = 0;
+		while (!circle.isEmpty()) {
+			index = (index + K - 1) % circle.size();
+			result.append(circle.remove(index));
+			if (!circle.isEmpty()) {
+				result.append(", ");
+			}
 		}
-		stringBuilder.delete(stringBuilder.length()-2,stringBuilder.length());
-		stringBuilder.append(">");
-		return stringBuilder;
-	}
+		result.append(">");
 
-	private static void josephusCalculation(int count, ArrayList<Integer> JosephusPermutation, Deque<Integer> people) {
-		while (count-- > 0) {
-			people.addLast(people.poll());
-		}
-		JosephusPermutation.add(people.poll());
+		System.out.println(result);
 	}
 }
