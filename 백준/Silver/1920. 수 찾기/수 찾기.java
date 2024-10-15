@@ -1,70 +1,41 @@
-import java.util.Arrays;
-import java.util.Scanner;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
 public class Main {
 
-	private static boolean isFind;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
-		/**
-		 * 이진 탐색 기본 문제
-		 */
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		Scanner scanner = new Scanner(System.in);
+		int N = Integer.parseInt(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
 
-		int[] sortedNumbers = getNumbers(scanner);
-		Arrays.sort(sortedNumbers);
-
-		mainAlgorithm(scanner, sortedNumbers);
-	}
-
-	private static void mainAlgorithm(Scanner scanner, int[] sortedNumbers) {
-		int M = scanner.nextInt();
-
-		for (int i = 0; i < M; i++) {
-			isFind = false;
-			int numbersToBeFound = scanner.nextInt();
-
-			isFind = binarySearch(sortedNumbers, numbersToBeFound);
-			printAnswer();
-		}
-	}
-
-	private static void printAnswer() {
-		if (isFind) {
-			System.out.println(1);
-			return;
-		}
-		System.out.println(0);
-	}
-
-	private static int[] getNumbers(Scanner scanner) {
-		int N = scanner.nextInt();
-		int[] sortedNumbers = new int[N];
-
+		HashMap<Integer, Integer> map = new HashMap<>();
 		for (int i = 0; i < N; i++) {
-			sortedNumbers[i] = scanner.nextInt();
+			int num = Integer.parseInt(st.nextToken());
+			map.put(num, 1);  
 		}
-		return sortedNumbers;
+
+		int M = Integer.parseInt(br.readLine());
+		st = new StringTokenizer(br.readLine());
+
+		StringBuilder answer = new StringBuilder();
+		for (int i = 0; i < M; i++) {
+			int query = Integer.parseInt(st.nextToken());
+			answer.append(map.getOrDefault(query, 0)).append("\n");
+		}
+
+		System.out.print(answer);
 	}
 
-	private static boolean binarySearch(int[] sortedNumbers, int target) {
-		int startIdx = 0;
-		int endIdx = sortedNumbers.length - 1;
 
-		while (startIdx <= endIdx) {
-			int setMedium = (startIdx + endIdx) / 2;
-			int midIdx = sortedNumbers[setMedium];
 
-			if (midIdx > target) {
-				endIdx = setMedium - 1;
-			} else if (midIdx < target) {
-				startIdx = setMedium + 1;
-			} else {
-				isFind = true;
-				break;
-			}
-		}
-		return isFind;
-	}
 }
+
+
