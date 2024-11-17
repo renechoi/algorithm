@@ -1,114 +1,90 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.util.StringTokenizer;
 
 public class Main {
 
-	static int[][] tree;
+	static class Node {
+		char data;
+		Node left;
+		Node right;
 
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		int numberOfNodes = scanner.nextInt();
-		scanner.nextLine();
-
-		saveNodeAsTree(scanner, numberOfNodes);
-
-		preOrder(0);
-		System.out.println();
-		inOrder(0);
-		System.out.println();
-		postOrder(0);
-		System.out.println();
+		Node(char data) {
+			this.data = data;
+		}
 	}
 
-	private static void saveNodeAsTree(Scanner scanner, int numberOfNodes) {
-		tree = new int[26][2];
-		/**
-		 * 2차원 배열 => 인덱싱이 자동으로 된다고 했을 때
-		 * 0 => left
-		 * 1 => right
-		 *
-		 *     A  B  C  D  E  F  G
-		 *  L  B  D  E  .  .  .  .
-		 *  R  C  .  F  .  .  G  .
-		 *
-		 *  =>
-		 *     0  1  2  3  4  5  6
-		 *     --------------------
-		 * 0   1  3  4 -1 -1 -1 -1
-		 * 1   2 -1  5 -1 -1  6 -1
-		 *
-		 *
-		 */
+	public static void main(String[] args) throws IOException {
 
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-		for (int i = 0; i < numberOfNodes; i++) {
-			String[] nodeInput = scanner.nextLine().split(" ");
-			// 아스키코드로 인덱싱하여 저장 => A => 0
-			int node = node(nodeInput[0].charAt(0));
-			char left = nodeInput[1].charAt(0);
-			char right = nodeInput[2].charAt(0);
+		int N = Integer.parseInt(bufferedReader.readLine());
 
-			// 자식 노드가 없이 끝나는 경우 . => -1로 저장
-			if (left == '.') {
-				tree[node][0] = -1;
-			} else {
-				tree[node][0] = node(left);
+		Node[] nodes = new Node[27]; // 1-base 배열 사용
+		for (int i = 1; i <= 26; i++) {
+			nodes[i] = new Node((char)('A' + i - 1));
+		}
+
+		for (int i = 0; i < N; i++) {
+			StringTokenizer st = new StringTokenizer(bufferedReader.readLine());
+			char parent = st.nextToken().charAt(0);
+			char left = st.nextToken().charAt(0);
+			char right = st.nextToken().charAt(0);
+
+			int parentIndex = parent - 'A' + 1;
+			if (left != '.') {
+				int leftIndex = left - 'A' + 1;
+				nodes[parentIndex].left = nodes[leftIndex];
 			}
-
-			if (right == '.') {
-				tree[node][1] = -1;
-			} else {
-				tree[node][1] = node(right);
+			if (right != '.') {
+				int rightIndex = right - 'A' + 1;
+				nodes[parentIndex].right = nodes[rightIndex];
 			}
 		}
 
+		StringBuilder preOrderResult = new StringBuilder();
+		StringBuilder inOrderResult = new StringBuilder();
+		StringBuilder postOrderResult = new StringBuilder();
 
+		preOrder(nodes['A' - 'A' + 1], preOrderResult);
+		inOrder(nodes['A' - 'A' + 1], inOrderResult);
+		postOrder(nodes['A' - 'A' + 1], postOrderResult);
+
+		System.out.println(preOrderResult.toString());
+		System.out.println(inOrderResult.toString());
+		System.out.println(postOrderResult.toString());
 	}
 
-	private static int node(char nodeCharacter) {
-		return nodeCharacter - 'A';
-	}
-
-	public static void preOrder(int node) {
-
-		/**
-		 * 1번인 A부터 시작
-		 *
-		 * 재귀 형태로 탐색
-		 * => tree[0][0] = 1(B) => tree[1][0] = 3(D) => tree[3][0] = -1 => return => tree[3][1] = -1 -> return -> tree[1][1] = -1 -> return -> tree[0][1] = 2(C)
-		 * => tree[2][0] = 4(E) => tree[4][0] = -1 => return => tree[4][1] -> -1 -> return -> tree[2][1] = 5(F)
-		 * => tree[5][0] = -1 => return => tree[5][1] = 6(G)
-		 * => tree[6][0] => -1 => return
-		 */
-
-		if (isLeaf(node)) {
+	static void preOrder(Node node, StringBuilder sb) {
+		if (node == null)
 			return;
-		}
-
-		System.out.print((char) (node + 'A'));  // 현재 노드 출력
-
-		preOrder(tree[node][0]);
-		preOrder(tree[node][1]);
+		sb.append(node.data);
+		preOrder(node.left, sb);
+		preOrder(node.right, sb);
 	}
 
-	public static void inOrder(int node) {
-		if (isLeaf(node))
+	static void inOrder(Node node, StringBuilder sb) {
+		if (node == null)
 			return;
-
-		// 0 = A -> tree[0][0] = B = 1 -> tree[1][0] = D = 3 -> tree[3][0] = -1 -> return -> 거꾸로 D 출력 -> B 출력 -> A 출력
-		inOrder(tree[node][0]);
-		System.out.print((char) (node + 'A'));
-		inOrder(tree[node][1]);
+		inOrder(node.left, sb);
+		sb.append(node.data);
+		inOrder(node.right, sb);
 	}
 
-	public static void postOrder(int node) {
-		if (isLeaf(node))
+	static void postOrder(Node node, StringBuilder sb) {
+		if (node == null)
 			return;
-		postOrder(tree[node][0]);
-		postOrder(tree[node][1]);
-		System.out.print((char) (node + 'A'));
+		postOrder(node.left, sb);
+		postOrder(node.right, sb);
+		sb.append(node.data);
 	}
 
-	private static boolean isLeaf(int start) {
-		return start == -1;
-	}
 }
+
+
