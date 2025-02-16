@@ -1,4 +1,3 @@
-
 import static java.lang.Integer.*;
 
 import java.io.BufferedReader;
@@ -24,20 +23,43 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		int n = Integer.parseInt(br.readLine());
-
-		PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
-
+		int[][] matrix = new int[n][n];
 		for (int i = 0; i < n; i++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			for(int j = 0; j < n; j++) {
-				pq.add(parseInt(st.nextToken()));
+			for (int j = 0; j < n; j++) {
+				matrix[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
 
-		for (int i = 0; i < n-1; i++) {
-			pq.poll();
+		PriorityQueue<Element> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
+
+		for (int j = 0; j < n; j++) {
+			maxHeap.offer(new Element(matrix[n - 1][j], n - 1, j));
 		}
 
-		System.out.println(pq.poll());
+		for (int i = 0; i < n - 1; i++) {
+			Element current = maxHeap.poll();
+			if (current.row > 0) {
+				maxHeap.offer(new Element(matrix[current.row - 1][current.col], current.row - 1, current.col));
+			}
+		}
+
+		System.out.println(maxHeap.poll().value);
 	}
+
+	static class Element implements Comparable<Element> {
+		int value, row, col;
+
+		Element(int value, int row, int col) {
+			this.value = value;
+			this.row = row;
+			this.col = col;
+		}
+
+		@Override
+		public int compareTo(Element o) {
+			return Integer.compare(this.value, o.value);
+		}
+	}
+
 }
