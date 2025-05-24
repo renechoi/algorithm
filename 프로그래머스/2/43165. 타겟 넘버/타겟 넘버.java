@@ -1,31 +1,24 @@
 class Solution {
-    
-     int target;
-     int[] numbers;
-     int count;
-    
     public int solution(int[] numbers, int target) {
-        this.target = target;
-        this.numbers = numbers;
-        this.count = 0; 
-        
-        dfs(0, 0);
-        
-        
-        return count;
-    }
-    
-    public void dfs(int index, int sum){
-        
-        if(index == numbers.length){
-            if(sum == target){
-                count++;
+        int total = 0;
+        for (int n : numbers){
+          total += n;  
+        } 
+
+        int sumPlusTarget = total + target;
+        if ((sumPlusTarget & 1) == 1 || total < target){
+          return 0; // 불가능  
+        } 
+        int need = sumPlusTarget >> 1;   // (S + target) / 2
+
+        int[] dp = new int[need + 1];
+        dp[0] = 1;
+
+        for (int num : numbers) {
+            for (int s = need; s >= num; --s) {
+                dp[s] += dp[s - num];
             }
-            return;
         }
-        
-        dfs(index +1, sum + numbers[index]);
-        dfs(index +1, sum - numbers[index]);
-        
+        return dp[need];
     }
 }
