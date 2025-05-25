@@ -1,4 +1,3 @@
-
 import static java.lang.Integer.*;
 
 import java.io.BufferedReader;
@@ -42,15 +41,14 @@ public class Main {
 		dfs(0, 0, 0);
 	}
 
-	public static void dfs(int start, int depth, int 모음카운트) {
+    public static void dfs(int start, int depth, int 모음카운트) {
+		if (!isPromising(depth, 모음카운트)) {
+            return;  
+        }
+
 		if (depth == L) {
-			int 자음카운트 = L - 모음카운트;
-			if (모음카운트 >= 1 && 자음카운트 >= 2) {
-				for (int i = 0; i < L; i++) {
-					System.out.println(sb);
-					return;
-				}
-			}
+			System.out.println(sb);
+			return;
 		}
 
 		for (int i = start; i < C; i++) {
@@ -59,10 +57,18 @@ public class Main {
 			dfs(i + 1, depth + 1, 모음개수계산(모음카운트, 알파벳));
 			sb.deleteCharAt(sb.length() - 1);
 		}
-
 	}
 
 	private static int 모음개수계산(int 모음카운트, char 알파벳) {
 		return 모음카운트 + (모음.contains(알파벳) ? 1 : 0);
 	}
+    
+    private static boolean isPromising(int depth, int 모음카운트) {
+        int 남은칸 = L - depth;
+        int 최소필요모음 = Math.max(0, 1 - 모음카운트);
+        int 최소필요자음 = Math.max(0, 2 - (depth - 모음카운트));
+    
+        return 남은칸 >= (최소필요모음 + 최소필요자음);
+    }
+
 }
