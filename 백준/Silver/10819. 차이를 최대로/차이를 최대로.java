@@ -14,7 +14,7 @@ public class Main {
 	static int n;
 	static int[] originalNumbers;
 	static int answer;
-	static int[] choice;
+	static int[] choice; // [20, 1, 15, .... ]
 	static boolean[] visited;
 
 	public static void main(String[] args) throws IOException {
@@ -32,8 +32,32 @@ public class Main {
 			originalNumbers[i] = Integer.parseInt(stringTokenizer.nextToken());
 		}
 
-		dfs(0);
+		dfs(0, -1, 0);
 		System.out.println(answer);
+
+	}
+
+	public static void dfs(int depth, int last, int currentSum){
+		if (depth == n){
+			answer = Math.max(answer, currentSum);
+			return;
+		}
+
+		for (int i = 0; i < n; i++) {
+			if (visited[i]){
+				continue;  
+			}
+			visited[i] = true;
+			if (depth == 0) {
+				// 첫 번째 자리에 원소를 고를 때는 비교할 “이전 값”이 없으므로 added=0
+				dfs(depth+1, originalNumbers[i], 0);
+			} else {
+				// 두 번째 이후 자리부터는 “마지막으로 고른 값(last)”이 있으므로 차이를 추가
+				int added = Math.abs(last - originalNumbers[i]);
+				dfs(depth + 1, originalNumbers[i], currentSum + added);
+			}
+			visited[i] = false;  
+		}
 
 	}
 
