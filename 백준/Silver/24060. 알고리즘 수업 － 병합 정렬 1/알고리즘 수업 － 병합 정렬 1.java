@@ -1,81 +1,73 @@
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
 
-	private static int[] sortedArray;
-	private static int count = 0;
-	private static int answer = -1;
-	private static int savingPointK;
+	static int N, K;
+	static int[] A;
+	static int[] tmp;
+	static int count = 0;
+	static int result = -1;
 
 	public static void main(String[] args) throws IOException {
-		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
 
-		StringTokenizer stringTokenizer = new StringTokenizer(bufferedReader.readLine());
-		int arraySize = Integer.parseInt(stringTokenizer.nextToken());
-		savingPointK = Integer.parseInt(stringTokenizer.nextToken());
-
-		int[] array = new int[arraySize];
-		stringTokenizer = new StringTokenizer(bufferedReader.readLine());
-		for (int i = 0; i < arraySize; i++) {
-			array[i] = Integer.parseInt(stringTokenizer.nextToken());
+		A = new int[N];
+		tmp = new int[N];
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) {
+			A[i] = Integer.parseInt(st.nextToken());
 		}
 
-		sortedArray = new int[arraySize];
-		merge_sort(array, 0, array.length - 1);
-
-		System.out.println(answer);
+		mergeSort(A, 0, N - 1);
+		System.out.println(result);
 	}
 
-	private static void merge_sort(int[] array, int left, int right) {
-		if (left == right) {
-			return;
+	public static void mergeSort(int[] A, int p, int r) {
+		if (p < r) {
+			int q = (p + r) / 2;
+			mergeSort(A, p, q);
+			mergeSort(A, q + 1, r);
+			merge(A, p, q, r);
 		}
-
-		int mid = (left + right) / 2;
-
-		merge_sort(array, left, mid);
-		merge_sort(array, mid + 1, right);
-
-		merge(array, left, mid, right);
 	}
 
-	private static void merge(int[] array, int left, int mid, int right) {
-		int leftPointer = left;
-		int rightPointer = mid + 1;
-		int newArrayIdx = left;
+	public static void merge(int[] A, int p, int q, int r) {
+		int i = p;
+		int j = q + 1;
+		int t = 0;
 
-		while (leftPointer <= mid && rightPointer <= right) {
-			if (array[leftPointer] <= array[rightPointer]) {
-				sortedArray[newArrayIdx] = array[leftPointer];
-				leftPointer++;
-				newArrayIdx++;
-				continue;
-			}
-
-			if (array[rightPointer] <= array[leftPointer]) {
-				sortedArray[newArrayIdx] = array[rightPointer];
-				rightPointer++;
-				newArrayIdx++;
+		while (i <= q && j <= r) {
+			if (A[i] <= A[j]) {
+				tmp[t++] = A[i++];
+			} else {
+				tmp[t++] = A[j++];
 			}
 		}
 
-		while (leftPointer <= mid) {
-			sortedArray[newArrayIdx++] = array[leftPointer++];
+		while (i <= q) { // 왼쪽 배열 부분이 남은 경우
+			tmp[t++] = A[i++];
 		}
 
-		while (rightPointer <= right) {
-			sortedArray[newArrayIdx++] = array[rightPointer++];
+		while (j <= r) { // 오른쪽 배열 부분이 남은 경우
+			tmp[t++] = A[j++];
 		}
 
-		for (int i = left; i <= right; i++) {
+		i = p;
+		t = 0;
+		while (i <= r) {
 			count++;
-			if (count == savingPointK) {
-				answer = sortedArray[i];
+			if (count == K) {
+				result = tmp[t];
+				return;
 			}
-			array[i] = sortedArray[i];
+			A[i++] = tmp[t++];
 		}
 	}
 }
